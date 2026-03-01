@@ -5,9 +5,9 @@ Connects your [Muse Headband](https://choosemuse.com/) to neurofeedback systems 
 
 *No Muse Mobile App, other Mobile Apps or OSC interfaces are required*
 
-## Quick Start (Production)
+## Quick Start 
 
-Download `setup.sh` and `start.sh` from the [latest release](../../releases/latest).
+Run `setup.sh` and `start.sh`
 
 ```bash
 # Run once to install dependencies
