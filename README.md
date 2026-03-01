@@ -1,36 +1,49 @@
 # muse-osc
-Connect Muse Headband to Neuromore Studio
+Connect Muse Headband to OSC-compatible software
 
-Connects your [Muse Headband](https://choosemuse.com/) to Neurofeedback systems accepting OSC, like [Neuromore Studio](https://www.neuromore.com/products).
+Connects your [Muse Headband](https://choosemuse.com/) to neurofeedback systems that accept OSC, like [Neuromore Studio](https://www.neuromore.com/products).
 
 *No Muse Mobile App, other Mobile Apps or OSC interfaces are required*
 
-## Usage
+## Quick Start (Production)
 
-0. Install requirements of this project:
+Download `setup.sh` and `start.sh` from the [latest release](../../releases/latest).
+
+```bash
+# Run once to install dependencies
+bash setup.sh
+
+# Run every session
+bash start.sh
+```
+
+`start.sh` accepts optional arguments:
+```bash
+bash start.sh --host 192.168.1.10 --port 4545
+```
+
+## Manual Setup
+
+0. Install Python dependencies:
 ```bash
 pip install -r requirements.txt
-# (optionally) install muselsl to connect to Muse
+```
+
+Install [`muselsl`](https://github.com/alexandrebarachant/muse-lsl) to connect to the Muse headband via Bluetooth (required):
+```bash
 pip install muselsl
 ```
 
-1. Use [`muselsl`](https://github.com/alexandrebarachant/muse-lsl) (or anything else like [BlueMuse](https://github.com/kowalej/BlueMuse) or [MuseLSL2](https://github.com/DominiqueMakowski/MuseLSL2)) to connect to Muse through Bluetooth and start the LSL stream:
+1. Start the Muse LSL stream (can also use [BlueMuse](https://github.com/kowalej/BlueMuse) or [MuseLSL2](https://github.com/DominiqueMakowski/MuseLSL2)):
 ```bash
 muselsl stream
 ```
 
-2. Run this project to read LSL and start the OSC stream
+2. In a second terminal, start the OSC bridge:
 ```bash
-python -m muse-osc
+python -m muse_osc
 ```
 
-3. Connect to Neuromore Studio.
-
-	Check the OSC Input settings, as can be found in [Neuromore Documentation](https://doc.neuromore.com/?cat=0&page=8#osc-settings-in-neuromore-studio). Default port is `4545/UDP` and host is `localhost`. These are also the default values for `muse-osc` `--host` and `--port` arguments.
-
-4. Use an *OSC Input Node* in Neuromore Studio.
-
-	Set `OSC address` and `Sample rate` as shown in [OSC Channels](https://github.com/operatorequals/muse-osc#osc-channels).
 
 
 ### OSC channels
@@ -63,23 +76,14 @@ The supported channels:
 
 Currently, the `PPG`, `GYRO`, `ACC` LSL streams are not tested, yet theoretically follow the same spec.
 
-### `--help`
+### Options
 
-As it is common to paste `arparse` `--help` output:
-
-```bash
-python -m muse_osc -h
-usage: muselsl2osc [-h] [--host HOST] [--port PORT] [--timeout TIMEOUT] [--lsl-streams {EEG,ACC,PPG,GYRO} [{EEG,ACC,PPG,GYRO} ...]]
-
-Converts LSL input to OSC for use with tools like Neuromore
-
-options:
-  -h, --help            show this help message and exit
-  --host HOST, -H HOST  The HOST where OSC will be sent to
-  --port PORT, -p PORT  The PORT where OSC will be sent to
-  --timeout TIMEOUT     Number of seconds until exit
-  --lsl-streams {EEG,ACC,PPG,GYRO} [{EEG,ACC,PPG,GYRO} ...]
-                        List of Muse LSL streams to be accepted
+```
+--host HOST, -H HOST        OSC destination host (default: 127.0.0.1)
+--port PORT, -p PORT        OSC destination port (default: 4545)
+--timeout TIMEOUT           Seconds before auto-stop (default: 3600)
+--lsl-streams EEG ACC PPG GYRO
+                            LSL streams to forward (default: EEG)
 ```
 
 ## Credits

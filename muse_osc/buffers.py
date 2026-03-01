@@ -112,7 +112,7 @@ class BandCalculator:
         for element in elements:
             # Compute the average band powers for all epochs in buffer
             # This helps to smooth out noise
-            ret += np.mean(self.buffers['EEG']['bands']['elements'][element][band], axis=0)
+            ret += np.mean(self.buffers['EEG']['bands']['elements'][element][band])
 
         # Return the mean of all the element measurements for the band
         return float(ret / len(elements))
